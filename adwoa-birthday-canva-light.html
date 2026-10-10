@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy 19th, Adwoa!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@1,600;1,800&family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#2c1156; --pink:#ff4f9a; --orange:#ffb238; --yellow:#ffe066;
+    --teal:#3fd6c2; --ink:#2c1a4d; --cream:#fff6ec;
+    box-sizing:border-box;
+  }
+  *{box-sizing:inherit;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,79,154,0.55), transparent 42%),
+      radial-gradient(circle at 85% 75%, rgba(255,178,56,0.5), transparent 45%),
+      radial-gradient(circle at 80% 10%, rgba(63,214,194,0.35), transparent 40%),
+      linear-gradient(160deg, var(--purple) 0%, #4a1670 55%, #1d0d3a 100%);
+    color:var(--cream); font-family:'Work Sans',sans-serif; font-weight:400;
+    overflow-x:hidden; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+
+  .confetti{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .c-piece{position:absolute;border-radius:3px;opacity:0.85;animation:drift linear infinite;}
+  @keyframes drift{0%{transform:translateY(-10vh) rotate(0deg);}100%{transform:translateY(110vh) rotate(360deg);}}
+  @media (prefers-reduced-motion: reduce){.c-piece{animation:none;display:none;}}
+
+  /* Lock screen */
+  .gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:linear-gradient(160deg, var(--purple), #1d0d3a);z-index:10;transition:opacity 0.9s ease;}
+  .gate.gone{opacity:0;pointer-events:none;}
+  .open-btn{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--ink);
+    background:linear-gradient(135deg, var(--yellow), var(--orange));border:none;border-radius:999px;
+    padding:18px 34px;cursor:pointer;box-shadow:0 10px 30px rgba(255,178,56,0.4);
+    animation:pop 2.2s ease-in-out infinite;
+  }
+  @keyframes pop{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+  @media (prefers-reduced-motion: reduce){.open-btn{animation:none;}}
+  .gate .hint{margin-top:16px;font-size:12px;color:rgba(255,246,236,0.6);}
+
+  .story{position:relative;max-width:480px;margin:0 auto;opacity:0;transition:opacity 1s ease 0.15s;}
+  .story.show{opacity:1;}
+
+  .beat{position:relative;z-index:1;padding:56px 26px;text-align:center;opacity:0;transform:translateY(14px);
+    transition:opacity 0.7s ease, transform 0.7s ease;}
+  .beat.visible{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){.beat{opacity:1;transform:none;transition:none;}}
+
+  .sticker{
+    display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;
+    font-size:30px;margin-bottom:16px;box-shadow:0 8px 20px rgba(0,0,0,0.25);
+  }
+  .sticker.moon{background:linear-gradient(135deg,var(--yellow),var(--orange));}
+  .sticker.stars{background:linear-gradient(135deg,var(--teal),#8fe8db);}
+  .sticker.plane{background:linear-gradient(135deg,var(--pink),#ff8fc0);}
+  .sticker.you{background:linear-gradient(135deg,#c9a2ff,#8f6bd8);}
+
+  .beat h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(22px,6vw,27px);margin-bottom:12px;color:var(--cream);}
+  .beat p{font-size:14.5px;line-height:1.7;color:rgba(255,246,236,0.88);max-width:340px;margin:0 auto;}
+  .beat .accent{color:var(--yellow);font-weight:600;}
+
+  .beat-open h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(36px,10vw,50px);line-height:1.05;
+    background:linear-gradient(135deg,var(--yellow),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .beat-open .sub{margin-top:10px;font-size:13px;letter-spacing:0.05em;color:rgba(255,246,236,0.75);}
+  .beat-open .lede{margin-top:22px;font-size:15.5px;line-height:1.7;max-width:330px;margin-left:auto;margin-right:auto;color:var(--cream);}
+
+  .burst{
+    position:relative;width:130px;height:130px;margin:6px auto 18px;display:flex;align-items:center;justify-content:center;
+  }
+  .burst::before{
+    content:'';position:absolute;inset:0;background:
+      conic-gradient(var(--pink) 0 10deg, transparent 10deg 20deg,
+      var(--yellow) 20deg 30deg, transparent 30deg 40deg,
+      var(--teal) 40deg 50deg, transparent 50deg 60deg,
+      var(--pink) 60deg 70deg, transparent 70deg 80deg,
+      var(--yellow) 80deg 90deg, transparent 90deg 100deg,
+      var(--teal) 100deg 110deg, transparent 110deg 120deg,
+      var(--pink) 120deg 130deg, transparent 130deg 140deg,
+      var(--yellow) 140deg 150deg, transparent 150deg 160deg,
+      var(--teal) 160deg 170deg, transparent 170deg 180deg,
+      var(--pink) 180deg 190deg, transparent 190deg 200deg,
+      var(--yellow) 200deg 210deg, transparent 210deg 220deg,
+      var(--teal) 220deg 230deg, transparent 230deg 240deg,
+      var(--pink) 240deg 250deg, transparent 250deg 260deg,
+      var(--yellow) 260deg 270deg, transparent 270deg 280deg,
+      var(--teal) 280deg 290deg, transparent 290deg 300deg,
+      var(--pink) 300deg 310deg, transparent 310deg 320deg,
+      var(--yellow) 320deg 330deg, transparent 330deg 340deg,
+      var(--teal) 340deg 350deg, transparent 350deg 360deg);
+    border-radius:50%; opacity:0.9;
+  }
+  .burst span{position:relative;font-family:'Fredoka',sans-serif;font-weight:700;font-size:34px;color:var(--ink);
+    background:var(--cream);width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);}
+
+  .polaroid{
+    width:170px;background:var(--cream);padding:12px 12px 34px;margin:10px auto 6px;border-radius:4px;
+    box-shadow:0 16px 34px rgba(0,0,0,0.35); transform:rotate(-4deg); position:relative;
+  }
+  .polaroid .frame{width:100%;aspect-ratio:1/1;background:linear-gradient(160deg,#e9d9ff,#c9a2ff);border-radius:2px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;}
+  .polaroid .frame img{width:100%;height:100%;object-fit:cover;display:block;}
+  .polaroid .frame .ph{color:var(--ink);font-size:11.5px;opacity:0.7;}
+  .polaroid .tape{position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-3deg);width:60px;height:20px;
+    background:rgba(255,224,102,0.75);}
+
+  .finale{padding-bottom:70px;}
+  .finale h1{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(26px,7vw,32px);margin:16px 0 8px;color:var(--cream);}
+  .finale p{font-size:14.5px;line-height:1.7;color:rgba(255,246,236,0.88);max-width:330px;margin:0 auto;}
+  .footer{margin-top:26px;font-size:11px;letter-spacing:0.1em;color:rgba(255,246,236,0.55);}
+
+  .sound-toggle{
+    position:fixed;z-index:20;bottom:calc(18px + env(safe-area-inset-bottom,0px));right:18px;
+    width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+    background:rgba(0,0,0,0.35);backdrop-filter:blur(6px);color:var(--cream);font-size:18px;
+    display:flex;align-items:center;justify-content:center;transition:opacity 0.6s ease;opacity:0;pointer-events:none;
+  }
+  .sound-toggle.ready{opacity:1;pointer-events:auto;}
+
+/* ---- Italic / stylised typography ---- */
+.beat h2,.beat-open h1,.finale h1,.open-btn,.burst span,.accent{font-family:'Playfair Display',serif;font-style:italic;}
+.beat-open h1{font-weight:800;line-height:1.05;}
+.beat-open h1 .hp{font-size:.6em;}
+.nm{font-family:'Dancing Script',cursive;font-style:normal;font-weight:700;font-size:1.4em;display:inline-block;transform:rotate(-3deg);padding:0 .1em;}
+.beat-open h1 .nm{font-size:1.6em;filter:drop-shadow(0 4px 0 rgba(255,79,154,.35));}
+.finale h1{font-weight:800;line-height:1.1;}
+.finale h1 .nm{color:var(--yellow);font-size:1.5em;}
+.beat h2{font-weight:600;}
+.beat h2::after{content:"\2726  \2726  \2726";display:block;font-family:'Playfair Display',serif;font-style:normal;font-size:11px;letter-spacing:6px;color:var(--yellow);margin-top:10px;}
+.beat p,.finale p{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:19px;line-height:1.5;}
+.beat-open .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:.14em;}
+.beat-open .lede{font-size:21px;}
+.beat-open .lede::before{content:"\201C";display:block;font-family:'Dancing Script',cursive;font-style:normal;font-size:56px;line-height:.7;color:var(--pink);}
+.beat-open .lede::after{content:"\201D";display:block;font-family:'Dancing Script',cursive;font-style:normal;font-size:56px;line-height:.5;color:var(--pink);}
+.accent{font-weight:800;font-size:1.5em;color:var(--yellow);}
+.burst span{font-weight:800;font-size:38px;}
+.open-btn{font-weight:700;font-size:19px;}
+.footer{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;letter-spacing:.1em;}
+</style>
+</head>
+<body>
+
+  <div class="confetti" id="confetti"></div>
+
+  <!-- Optional: point this at your own licensed/royalty-free song file to use a real track instead of the generated tone -->
+  <audio id="bgAudio" loop preload="auto" src="epic-spectrum-mission.mp3"></audio>  <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">🔊</button>
+
+  <div class="gate" id="gate">
+    <button class="open-btn" id="openBtn">🎉 tap to open your surprise</button>
+    <div class="hint">made just for you</div>
+  </div>
+
+  <div class="story" id="story">
+    <section class="beat beat-open">
+      <h1><span class="hp">Happy 19th,</span><br><span class="nm">Adwoa!</span> 🎈</h1>
+      <div class="sub">FLIGHT 19 · NOVEMBER SKY</div>
+      <p class="lede">None of the details here were placed by accident.</p>
+    </section>
+
+    <section class="beat">
+      <div class="sticker moon">🌙</div>
+      <h2>The moon</h2>
+      <p>Your quiet moments — still enough to think, dream, and just be yourself.</p>
+    </section>
+
+    <section class="beat">
+      <div class="sticker stars">⭐</div>
+      <h2>The stars</h2>
+      <p>What guides you — people, memories, and dreams you haven't reached yet.</p>
+    </section>
+
+    <section class="beat">
+      <div class="sticker plane">✈️</div>
+      <h2>The airplane</h2>
+      <p>Every journey ahead of you. This one carries a number: <span class="accent">19</span> — your Flight 19, born under the same November sky as you.</p>
+    </section>
+
+    <section class="beat">
+      <div class="sticker you">🖼️</div>
+      <h2>And the most important part — you</h2>
+      <p>Nineteen years brought you here. There are still places you haven't reached, and versions of you still waiting to be met.</p>
+    </section>
+
+    <section class="beat finale">
+      <div class="burst"><span>19</span></div>
+      <div class="polaroid">
+        <div class="tape"></div>
+        <div class="frame">
+          <img src="adwoa-photo.jpg" alt="Adwoa" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span class="ph" style="display:none;">her photo</span>
+        </div>
+      </div>
+      <p style="margin-top:22px;">I hope this isn't just something you keep on your desk. The sky is still enormous — and there's so much left to reach.</p>
+      <h1><span class="hp">Happy 19th Birthday,</span><br><span class="nm">Adwoa</span> 🎂</h1>
+      <p>Keep looking up. Keep exploring.<br>Wherever life takes you — keep flying. ✈️</p>
+      <div class="footer">NOVEMBER SKY · FLIGHT 19 · YOUR JOURNEY HAS ONLY JUST BEGUN</div>
+    </section>
+  </div>
+
+<script>
+(function(){
+  var colors = ['#ff4f9a','#ffe066','#3fd6c2','#ffb238','#c9a2ff'];
+  var field = document.getElementById('confetti');
+  var frag = document.createDocumentFragment();
+  for(var i=0;i<28;i++){
+    var p = document.createElement('div'); p.className='c-piece';
+    var w = Math.random()*6+4;
+    p.style.width = w+'px'; p.style.height = (w*2.2)+'px';
+    p.style.left = (Math.random()*100)+'%';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDuration = (Math.random()*8+9)+'s';
+    p.style.animationDelay = (Math.random()*10)+'s';
+    p.style.opacity = 0.5;
+    frag.appendChild(p);
+  }
+  field.appendChild(frag);
+
+  // --- Opening fanfare (public-domain "Happy Birthday" melody) + soft ambient tail ---
+  var audioCtx = null, soundOn = false, muted = false;
+  var bgAudio = document.getElementById('bgAudio');
+  var soundToggle = document.getElementById('soundToggle');
+
+  var NOTES = [ // [freq Hz, duration in beats]
+    [392.00,0.5],[392.00,0.5],[440.00,1],[392.00,1],[523.25,1],[493.88,2],
+    [392.00,0.5],[392.00,0.5],[440.00,1],[392.00,1],[587.33,1],[523.25,2],
+    [392.00,0.5],[392.00,0.5],[783.99,1],[659.25,1],[523.25,1],[493.88,1],[440.00,2],
+    [698.46,0.5],[698.46,0.5],[659.25,1],[523.25,1],[587.33,1],[523.25,2]
+  ];
+  var BEAT = 0.34; // seconds per beat
+
+  function scheduleFanfareAndAmbience(){
+    try{
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var melodyEnd = audioCtx.currentTime + 0.05;
+
+      NOTES.forEach(function(n){
+        var dur = n[1]*BEAT;
+        var osc = audioCtx.createOscillator();
+        var g = audioCtx.createGain();
+        osc.type = 'triangle'; osc.frequency.value = n[0];
+        g.gain.setValueAtTime(0, melodyEnd);
+        g.gain.linearRampToValueAtTime(0.09, melodyEnd + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, melodyEnd + dur*0.95);
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.start(melodyEnd); osc.stop(melodyEnd + dur);
+        melodyEnd += dur;
+      });
+
+      var padStart = melodyEnd + 0.6;
+      var masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0, padStart);
+      masterGain.gain.linearRampToValueAtTime(0.045, padStart + 2.5);
+      var filter = audioCtx.createBiquadFilter();
+      filter.type='lowpass'; filter.frequency.value=1200;
+      masterGain.connect(filter); filter.connect(audioCtx.destination);
+      [220,277.18,329.63].forEach(function(freq,i){
+        var osc=audioCtx.createOscillator(); osc.type='sine'; osc.frequency.value=freq;
+        var lfo=audioCtx.createOscillator(); lfo.frequency.value=0.08+i*0.02;
+        var lfoGain=audioCtx.createGain(); lfoGain.gain.value=0.4;
+        var voiceGain=audioCtx.createGain(); voiceGain.gain.value=0.5;
+        lfo.connect(lfoGain); lfoGain.connect(voiceGain.gain);
+        osc.connect(voiceGain); voiceGain.connect(masterGain);
+        osc.start(padStart); lfo.start(padStart);
+      });
+
+      function twinkle(){
+        if(muted || !audioCtx) return;
+        var tt = audioCtx.currentTime;
+        var freq=[880,987.77,1046.5,1318.5][Math.floor(Math.random()*4)];
+        var osc=audioCtx.createOscillator(); var g=audioCtx.createGain();
+        osc.type='sine'; osc.frequency.value=freq;
+        g.gain.setValueAtTime(0,tt); g.gain.linearRampToValueAtTime(0.045,tt+0.05);
+        g.gain.exponentialRampToValueAtTime(0.0001,tt+1.4);
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.start(tt); osc.stop(tt+1.5);
+        setTimeout(twinkle, 2500+Math.random()*3500);
+      }
+      setTimeout(twinkle, Math.max(0,(padStart - audioCtx.currentTime + 2))*1000);
+    }catch(e){ /* Web Audio unavailable; fail silently */ }
+  }
+
+  function startSound(){
+    if(bgAudio.getAttribute('src')){
+      bgAudio.volume = 0.55; bgAudio.play().catch(function(){});
+    } else {
+      scheduleFanfareAndAmbience();
+    }
+    soundOn = true; muted = false;
+    soundToggle.textContent = '\ud83d\udd0a';
+    soundToggle.classList.add('ready');
+  }
+  soundToggle.addEventListener('click', function(){
+    muted = !muted;
+    soundToggle.textContent = muted ? '\ud83d\udd07' : '\ud83d\udd0a';
+    if(bgAudio.getAttribute('src')){
+      if(muted) bgAudio.pause(); else bgAudio.play().catch(function(){});
+    } else if(audioCtx){
+      if(muted) audioCtx.suspend(); else audioCtx.resume();
+    }
+  });
+
+  var btn = document.getElementById('openBtn');
+  var gate = document.getElementById('gate');
+  var story = document.getElementById('story');
+  var opened = false;
+  btn.addEventListener('click', function(){
+    if(opened) return; opened = true;
+    startSound();
+    setTimeout(function(){ gate.classList.add('gone'); }, 150);
+    setTimeout(function(){ story.classList.add('show'); }, 500);
+    setTimeout(function(){ gate.style.display='none'; }, 1300);
+  });
+
+  var beats = document.querySelectorAll('.beat');
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, {threshold:0.25});
+    beats.forEach(function(b){ obs.observe(b); });
+  } else { beats.forEach(function(b){ b.classList.add('visible'); }); }
+})();
+</script>
+</body>
+</html>
