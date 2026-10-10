@@ -38,7 +38,7 @@
     font-family:'Fredoka',sans-serif;font-weight:600;font-size:16px;color:var(--ink);
     background:linear-gradient(135deg, var(--yellow), var(--orange));border:none;border-radius:999px;
     padding:18px 34px;cursor:pointer;box-shadow:0 10px 30px rgba(255,178,56,0.4);
-    animation:pop 2.2s ease-in-out infinite;
+    animation:pop 2.2s ease-in-out infinite;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:11;
   }
   @keyframes pop{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
   @media (prefers-reduced-motion: reduce){.open-btn{animation:none;}}
@@ -128,7 +128,7 @@
 .beat-open h1{font-weight:800;line-height:1.05;}
 .beat-open h1 .hp{font-size:.6em;}
 .nm{font-family:'Dancing Script',cursive;font-style:normal;font-weight:700;font-size:1.4em;display:inline-block;transform:rotate(-3deg);padding:0 .1em;}
-.beat-open h1 .nm{font-size:1.6em;filter:drop-shadow(0 4px 0 rgba(255,79,154,.35));}
+.beat-open h1 .nm{font-size:1.6em;color:var(--yellow);-webkit-text-fill-color:var(--yellow);filter:drop-shadow(0 4px 0 rgba(255,79,154,.35));}
 .finale h1{font-weight:800;line-height:1.1;}
 .finale h1 .nm{color:var(--yellow);font-size:1.5em;}
 .beat h2{font-weight:600;}
@@ -275,18 +275,22 @@
   }
 
   function startSound(){
-    if(bgAudio.getAttribute('src')){
-      bgAudio.volume = 0.55;
-      var pr = bgAudio.play();
-      if(pr && pr.catch) pr.catch(function(){ scheduleFanfareAndAmbience(); });
-    } else {
-      scheduleFanfareAndAmbience();
-    }
+    try{
+      if(bgAudio && bgAudio.getAttribute('src')){
+        bgAudio.volume = 0.55;
+        var pr = bgAudio.play();
+        if(pr && pr.catch) pr.catch(function(){ scheduleFanfareAndAmbience(); });
+      } else {
+        scheduleFanfareAndAmbience();
+      }
+    }catch(err){ try{ scheduleFanfareAndAmbience(); }catch(e2){} }
     soundOn = true; muted = false;
-    soundToggle.textContent = '\ud83d\udd0a';
-    soundToggle.classList.add('ready');
+    if(soundToggle){
+      soundToggle.textContent = '\ud83d\udd0a';
+      soundToggle.classList.add('ready');
+    }
   }
-  soundToggle.addEventListener('click', function(){
+  if(soundToggle) soundToggle.addEventListener('click', function(){
     muted = !muted;
     soundToggle.textContent = muted ? '\ud83d\udd07' : '\ud83d\udd0a';
     if(audioCtx){
@@ -300,13 +304,18 @@
   var gate = document.getElementById('gate');
   var story = document.getElementById('story');
   var opened = false;
-  btn.addEventListener('click', function(){
+  function openSurprise(e){
+    if(e && e.preventDefault) e.preventDefault();
     if(opened) return; opened = true;
-    startSound();
-    setTimeout(function(){ gate.classList.add('gone'); }, 150);
-    setTimeout(function(){ story.classList.add('show'); }, 500);
-    setTimeout(function(){ gate.style.display='none'; }, 1300);
-  });
+    // 1) Reveal the card FIRST, so nothing (like audio) can ever block it
+    gate.classList.add('gone');
+    story.classList.add('show');
+    setTimeout(function(){ gate.style.display='none'; }, 1000);
+    // 2) Then try the music; if the browser refuses, the card still works
+    try{ startSound(); }catch(err){ if(soundToggle) soundToggle.classList.add('ready'); }
+  }
+  btn.addEventListener('click', openSurprise);
+  btn.addEventListener('touchend', openSurprise, {passive:false});
 
   var beats = document.querySelectorAll('.beat');
   if('IntersectionObserver' in window){
@@ -319,3 +328,4 @@
 </script>
 </body>
 </html>
+
